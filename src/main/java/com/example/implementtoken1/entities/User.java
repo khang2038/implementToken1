@@ -2,10 +2,13 @@ package com.example.implementtoken1.entities;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Objects;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -13,41 +16,35 @@ import java.util.Set;
 @Setter
 @Table(name = "users")
 public class User {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Id
-    @Column(name = "user_name")
-    private String userName;
+  @NotBlank
+  @Size(max = 20)
+  private String username;
 
-    @Column(name = "user_first_name")
-    private String userFirstName;
+  @NotBlank
+  @Size(max = 50)
+  @Email
+  private String email;
 
-    @Column(name = "user_last_name")
-    private String userLastName;
+  @NotBlank
+  @Size(max = 120)
+  private String password;
 
-    @Column(name = "user_password")
-    private String userPassword;
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(  name = "user_roles",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "role_id"))
+  private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "USER_ROLE",
-            joinColumns = {
-                    @JoinColumn(name = "USER_ID")
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name = "ROLE_ID")
-            }
-    )
-    private Set<Role> role;
+  public User() {
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(userName, user.userName) && Objects.equals(userFirstName, user.userFirstName) && Objects.equals(userLastName, user.userLastName) && Objects.equals(userPassword, user.userPassword) && Objects.equals(role, user.role);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(userName, userFirstName, userLastName, userPassword, role);
-    }
+  public User(String username, String email, String password) {
+    this.username = username;
+    this.email = email;
+    this.password = password;
+  }
 }

@@ -1,7 +1,6 @@
 package com.example.implementtoken1.controller;
 
 import com.example.implementtoken1.entities.Role;
-import com.example.implementtoken1.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

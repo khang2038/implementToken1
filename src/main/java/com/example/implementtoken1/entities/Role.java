@@ -7,37 +7,42 @@ import lombok.Setter;
 
 import java.util.Objects;
 
-@Entity
 @Getter
 @Setter
+@Entity
 @Table(name = "roles")
 public class Role {
-
     @Id
-    @Column(name = "role_name")
-    private String roleName;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @Column(name = "role_description")
-    private String roleDescription;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private ERole name;
+
+    public Role() {
+
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Role role = (Role) o;
-        return Objects.equals(roleName, role.roleName) && Objects.equals(roleDescription, role.roleDescription);
+        return Objects.equals(id, role.id) && name == role.name;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(roleName, roleDescription);
+        return Objects.hash(id, name);
     }
 
     @Override
     public String toString() {
         return "Role{" +
-                "roleName='" + roleName + '\'' +
-                ", roleDescription='" + roleDescription + '\'' +
+                "id=" + id +
+                ", name=" + name +
                 '}';
     }
 }
+
